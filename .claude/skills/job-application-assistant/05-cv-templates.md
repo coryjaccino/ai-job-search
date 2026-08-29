@@ -12,7 +12,7 @@ All CVs use the moderncv LaTeX package with the "banking" style and "blue" color
 
 **Output file:** `cv/main_<company>_<role>.tex`
 **Compile with:** **lualatex** on MiKTeX/TeX Live. pdflatex often fails on modern MiKTeX installs with `fontawesome5` font-expansion errors; lualatex handles the same sources cleanly.
-**Master reference:** `cv/main_example.tex` (comprehensive CV with all competencies, experience, and achievements - use as source when building targeted CVs)
+**Master reference:** `cv/main_example.tex` is a structural and presentation reference. It is not an independent factual source; generated CV claims must follow the claim policy below.
 
 ### Compile command
 
@@ -20,7 +20,7 @@ All CVs use the moderncv LaTeX package with the "banking" style and "blue" color
 cd cv && lualatex -interaction=nonstopmode main_<company>_<role>.tex
 ```
 
-Expected output: `Output written on main_<company>_<role>.pdf (2 pages, ...)`. Any page count other than 2 is a failure that must be fixed before presenting to the user.
+Expected output: `Output written on main_<company>_<role>.pdf (... pages, ...)`. A generated CV must be no more than 2 pages and should normally use 2 pages for this senior profile. Never add weak content merely to fill a second page.
 
 ## Document Structure
 
@@ -43,29 +43,28 @@ Expected output: `Output written on main_<company>_<role>.pdf (2 pages, ...)`. A
     linkcolor=blue,
     filecolor=magenta,
     urlcolor=blue,
-    pdftitle={[YOUR_NAME] - CV},
+    pdftitle={Cory Jaccino - CV},
     pdfpagemode=FullScreen,
 }
 \usepackage[scale=0.77]{geometry}
 \usepackage{import}
 
 % Personal data
-\name{[FIRST_NAME]}{[LAST_NAME]}
-\address{[YOUR_ADDRESS]}{}{}
-\phone[mobile]{[YOUR_PHONE]}
-\email{[YOUR_EMAIL]}
-\extrainfo{\href{[YOUR_LINKEDIN_URL]}{LinkedIn}, \href{[YOUR_GITHUB_URL]}{GitHub}}
+\name{Cory}{Jaccino}
+\address{Kuressaare, Estonia}{}{}
+\phone[mobile]{+372 5854 7237}
+\email{cory@coryjaccino.com}
+\extrainfo{\href{https://www.linkedin.com/in/coryjaccino}{LinkedIn}}
 
 \begin{document}
 \makecvtitle
 
-% 1. Profile statement (1-3 sentences, tailored per role)
-% 2. Skills section
-% 3. Education section
-% 4. Professional Experience section
-% 5. Selected Publications (if applicable)
-% 6. Honors and Awards (if applicable)
-% 7. References
+% 1. Unlabelled, role-specific summary (2-3 sentences)
+% 2. Core Competencies
+% 3. Professional Experience
+% 4. Selected Certifications
+% 5. Education
+% 6. Languages or selected projects, only when relevant
 
 \end{document}
 ```
@@ -106,40 +105,62 @@ Section headings such as `\section{Core Competencies}`, `Professional Experience
 
 ## Section-by-Section Tailoring
 
+## Factual grounding and claim policy
+
+`01-candidate-profile.md` is the canonical claim inventory for generated CV content. `CLAUDE.md` is a concise profile summary, and `cv/main_example.tex` is a structural and presentation reference; neither independently authorizes a claim.
+
+- **Approved:** A claim in the candidate profile that can be reused or accurately reframed.
+- **Needs clarification:** A conflicting, ambiguous, mathematically unclear, or incompletely sourced claim. Do not use it until the user resolves it.
+- **In progress:** Professional development that may be identified as ongoing, never as completed.
+- **Unsupported:** Do not use it.
+
+Never choose the most impressive version of a conflicting claim. Preserve the conflicting wording in review notes, ask the user which version is current, and use a safe non-numeric approved statement or omit the claim until it is resolved. Existing tailored CVs and cover letters may inform structure or phrasing, never facts.
+
+### Metric integrity checkpoint
+
+Before using a metric, verify its exact value and unit, timeframe, employer and role, category (budget, revenue, savings, opportunity, percentage, or audience), the candidate's relationship to it (managed, generated, influenced, identified, proposed, or reported), and any qualifier. Preserve qualifiers such as `proposed`, `shared responsibility`, `within the first month`, and `opportunity`. Do not add an unverified mechanism to explain a result. If any part is unclear, ask the user; do not guess or use the metric.
+
+### Requirement and gap handling
+
+The CV emphasizes requirements the candidate can prove. Use the posting's exact term only when it is a truthful, natural description of approved evidence. Do not add unsupported keywords, rename stable section headings for a posting keyword, or state ordinary skill gaps in the CV. A material eligibility gap, such as work authorization, clearance, or a mandatory credential, is handled separately and only where appropriate in the cover letter.
+
 ### Profile Statement / Elevator Pitch (Best Practice)
 This is the most important section to customize. It appears right after `\makecvtitle`.
 
-Write 5-7 lines that function as an "elevator pitch": a concise, compelling introduction explaining why you're qualified for *this specific role*. Focus on what the employer gains from hiring you.
+Write an unlabelled, job-specific summary of 2-3 sentences (about 45-70 words and normally no more than 4 rendered lines). Lead with the most relevant professional identity, add 2-3 approved differentiators, and connect them to the employer's need. Do not use a generic career objective, personality adjectives, an exhaustive skill list, or claims that certifications alone prove production experience.
 
 When the role sits outside your home domain, **lead with the domain-transfer argument** - the one or two sentences connecting your background to their problem (e.g. wave physics to radar signal processing) belong in the profile statement's opening, not buried in the cover letter. It is the strongest card a domain-changer holds; play it first.
 
-**Create 2-3 profile statement templates for your main role types:**
+The examples below show possible structures only. They are not fact sources and must be rebuilt from approved evidence for every posting.
 
-<!-- SETUP: These are populated based on your background -->
-**For [YOUR_PRIMARY_ROLE_TYPE] roles:**
-> [YOUR_PROFILE_STATEMENT_TEMPLATE_1]
+**For Google Ads / PPC / Digital Marketing roles:**
+> 18-year Google Ads and Google Analytics specialist with a proven track record of managing $3M+ yearly budgets, reducing cost-per-install by 73%, and generating over $2B in annual room revenue through global paid search strategy. 14x Google Cloud and 9x Microsoft Azure certified, bringing an AI/automation lens to digital marketing. Experienced across Fortune 500 companies (IHG, Turner) and startups, combining hands-on campaign management with strategic advisory and team mentorship.
 
-**For [YOUR_SECONDARY_ROLE_TYPE] roles:**
-> [YOUR_PROFILE_STATEMENT_TEMPLATE_2]
+**For Google Cloud / AI / ML Engineering roles:**
+> Google Cloud-certified mentor who founded a 450+ member ML/AI study group and published certification-preparation content in three languages. Combines cloud training and technical knowledge with 18 years of data-driven digital marketing experience, including analytics and business-impact reporting. Frames technical concepts clearly for diverse audiences.
 
-Statements labeled *[Used for: <company>_<role>]* were extracted from archived application drafts by `/setup` Path A. They are **phrasing references, never fact sources**: when drafting from one, every factual claim still comes from `01-candidate-profile.md` - a past tailored draft does not vouch for its own accuracy.
+**For Technical Solutions / Consulting roles:**
+> Google Ads and Google Cloud professional who connects technical implementation with business strategy. Brings approved experience in paid-search budgeting, app-install cost reduction, client education, and marketing workflows. Combines Google Cloud, WordPress, Tag Manager, and Looker Studio work with strategic advisory and cross-functional collaboration.
 
 ### Core Competencies / Skills Section (Best Practice)
 Reorder and emphasize based on the role. Use bold category labels.
 
-List **5-7 key competencies** in bullet format, tailored to the specific job. For each competency, briefly explain how it adds value to the position.
+List 4-6 compact competency groups in bullet format, tailored to the specific job. Separate professional experience from certifications, project work, familiarity, and in-progress learning. Prefer concrete evidence in Professional Experience over long tool inventories or repeated claims.
 
 Use the posting's own core term in the matching bullet's bold label when it truthfully applies - ATS and skim-reading hiring managers match literally, and "MLOps" in a heading outperforms a paraphrase like "ML Deployment".
 
 ### Education
-- Always include your highest degrees
-- For senior roles, keep education brief (dates and titles only)
-- Include thesis topics when relevant to the target role
+- Label degrees, coursework, exchange programs, and certifications accurately; never present graduate coursework as a graduate degree.
+- Keep entries compact. Include dates only when verified in the candidate profile; never guess dates.
+- Include 1-3 entries that add relevant qualification or context. Include course descriptions only when verified and directly relevant.
 
 ### Professional Experience
 - Rewrite bullet points to emphasize aspects most relevant to the target role
-- Use 4-6 bullets for most recent role, 3-4 for previous, 2-3 for older
-- **Emphasize measurable results** where possible: "Reduced processing time by X%", "Model adopted by the team"
+- Select visible bullets by relevance to the posting, evidence strength, tenure and scope, uniqueness, recency, career continuity, and the page budget; do not use a fixed count by chronology alone.
+- Write each bullet to fit on one rendered line whenever specificity and credibility remain intact. A two-line bullet is an exception for evidence materially weakened by further compression; avoid bullets longer than two lines.
+- Use an approved action or responsibility + scope/context + result or purpose. Preserve attribution and qualifiers; do not turn participation, an identified opportunity, or a proposed outcome into ownership or realized savings.
+- Keep strong, unused, role-specific alternatives as clearly marked `% ALTERNATIVE:` comments in the generated `.tex` file. They must be approved, non-duplicative, and tailored to the same posting; the strongest bullets remain active by default.
+- **Emphasize measurable results** only when the metric passes the metric-integrity checkpoint: "Managed $3M+ budget", "Reduced CPI by 73%", "Generated $2B in annual revenue".
 
 ### Handling Employment Gaps (Best Practice)
 If there is a gap in your employment history:
@@ -158,9 +179,7 @@ Wherever the CV names a verifiable artifact - a public project, a hackathon entr
 ### Honors and Awards
 - Keep format brief, one line each
 
-### References
-- List 2-4 references with name, title, company, and contact
-- End with: "More references are available upon request."
+- Omit references and the "available upon request" line by default. Provide references separately when requested.
 - **Do not attach reference letters** - employers typically contact references directly
 
 ## Compile-and-Inspect Loop (MANDATORY)
@@ -190,8 +209,8 @@ Add `\enlargethispage{2-3\baselineskip}` before a late section (e.g., before `\s
 **Problem: 3 pages with significant content on page 3**
 Cut content — do not compress geometry or `\vspace`. See "Relevance-weighted cutting" below for the rule.
 
-**Problem: content finishes early on page 2 (feels thin)**
-Restore the highest-relevance item that was previously cut — a CV that ends mid-page 2 looks incomplete.
+**Problem: content finishes early on page 2**
+Do not add weak content simply to fill the page. Restore a previously cut item only when it materially strengthens the targeted evidence.
 
 ## ATS Parseability
 
@@ -206,25 +225,25 @@ cd cv && pdftotext -layout main_<company>_<role>.pdf main_<company>_<role>.txt
 What to check in the extraction:
 
 - **Contact details as literal text.** The stock template's fontawesome contact icons extract as glyph names (`MOBILE-ALT`, `Envelope`) - harmless noise, because the actual address and number are printed beside them. The failure mode is a contact detail carried *only* by an icon or a hyperlink (like the `LinkedIn` link text, whose URL is not in the text layer): invisible to an ATS. The email address must always appear as printed text.
-- **No garbled output.** `(cid:NNN)` markers or `�` characters mean a font is embedded without a Unicode mapping - an ATS sees the same garbage. This shows up with unusual fonts in custom templates, not with the stock moderncv setup under lualatex.
+- **No garbled output.** `(cid:NNN)` markers or Unicode replacement characters (`U+FFFD`) mean a font is embedded without a usable Unicode mapping - an ATS sees the same garbage. This shows up with unusual fonts in custom templates, not with the stock moderncv setup under lualatex.
 - **Reading order.** The stock banking style is single-column, so extraction order matches visual order. Custom templates (via `/add-template`) with sidebars or multi-column layouts can interleave unrelated lines; if extraction order is scrambled, the user is trading ATS compatibility for looks and should be told.
 - **Keyword coverage.** Match the posting's required/preferred terms against the extracted text, in the posting's language. Prefer the posting's exact term over a synonym when it is truthfully applicable - ATS matching is often literal. Never add a keyword the profile does not support.
+- **Dates.** Every employment entry must have recognizable dates. Education dates must be recognizable when verified dates exist in the candidate profile; otherwise, their omission is acceptable and must not be guessed.
 
-## Page Budget - Hard 2-Page Limit
+## Page Budget - Maximum 2 Pages
 
-The CV **must** fit on exactly 2 pages when compiled. Use these content limits as a guide:
+The generated CV must fit within 2 pages and should normally use 2 pages for this senior profile. Use these flexible limits as a guide:
 
 | Section | Max budget |
 |---------|-----------|
-| Profile statement | 3-4 lines |
-| Skills | 5 items, each 1-2 lines |
-| Most recent role | 4-5 bullets |
-| Previous role | 2-3 bullets |
-| Older roles | 2 bullets (1 line each) |
-| Education | 2-3 entries |
-| Publications | 2-3 entries |
-| Awards | 3 entries, single line each |
-| References | "Available upon request." (single line) |
+| Job-specific summary | Normally 3-4 lines |
+| Core Competencies | 4-6 compact groups |
+| Anchor role | 2-4 bullets, selected by relevance, tenure, scope, and evidence strength |
+| Supporting role | 1-3 bullets |
+| Continuity-only role | 1 compact bullet or title/date entry |
+| Education | 1-3 compact entries |
+| Certifications | Selected credentials or one compact grouped line |
+| Optional sections | Include only when they add distinct targeted evidence |
 
 **If in doubt, cut rather than squeeze.** Reducing `\vspace` or geometry scale to force-fit content makes the CV look cramped.
 
@@ -255,23 +274,17 @@ Cut the lowest-total-score line first, regardless of which section it sits in.
 - Do not cut the one concrete example the cover letter leans on. Relevance is measured against the cover letter you wrote, not just the job posting — interviewers will have read both.
 - Do not cut to fit if the fit is borderline (2.02 pages). Prefer `\enlargethispage{2-3\baselineskip}` on a late section for near-misses; reserve content cuts for genuine overflow (content on page 3 that is more than a single trailing section).
 
-## Recommended Section Order
+## Default section architecture
 
-The section order varies by role type:
+Use this order unless the posting supplies a specific reason to change it:
 
-**For technical / data science / ML roles:**
-1. Profile statement / elevator pitch
-2. Core competencies / Skills
-3. Professional Experience (reverse chronological)
-4. Education (reverse chronological)
-5. Languages
-6. Publications & Awards
-7. References
+1. Contact header
+2. Unlabelled, job-specific summary
+3. Core Competencies
+4. Professional Experience
+5. Selected Certifications
+6. Education
+7. Languages, when relevant
+8. Selected Projects, only when they add evidence not shown in employment
 
-**For domain-specific / specialist roles:**
-1. Profile statement / elevator pitch
-2. Core competencies / Skills
-3. Education (reverse chronological) - credentials are a key qualifier
-4. Professional Experience (reverse chronological)
-5. Publications & Awards
-6. References
+Move Selected Certifications above Professional Experience only when a named credential is a gating requirement. Move Education above Professional Experience only when a verified degree is a central qualifier and stronger than the experience evidence. Omit empty or low-value sections.

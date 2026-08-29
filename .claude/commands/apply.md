@@ -64,20 +64,18 @@ Also read the most recent existing CV and cover letter files for concrete struct
 - Read any existing `cv/main_*.tex` file as a LaTeX template reference
 - Read any existing `cover_letters/cover_*.tex` or `cover_letters/Cover_*.tex` file as a template reference
 
-*The master candidate profile (`01-candidate-profile.md`), the master CV (`cv/main_example.tex`), and CLAUDE.md's Candidate Profile section are the sole source of truth for facts; existing tailored CVs may be read for structure and phrasing only, never as a source of claims.*
+*For CV claims, follow the canonical claim policy in `05-cv-templates.md`: `01-candidate-profile.md` is the claim inventory; `cv/main_example.tex`, CLAUDE.md, and previous tailored documents are not independent factual authorities.*
 
 ### Requirement coverage (both documents)
-- **Every requirement the posting states gets addressed - matched or honestly gapped, never silently omitted.** A stated requirement the candidate lacks (a tool, a clearance, years of experience) is acknowledged with an honest bridge ("not in my daily toolkit yet; a natural extension of X"), because omission reads as hiding once an interviewer asks. Build the requirement list from Step 1 and check both drafts against it before Step 3.
-- **Engage nice-to-haves by name** where the profile supports honest adjacency (e.g. "conceptually aligned with <named tool>"), and use the posting's own term over a synonym wherever it is truthfully applicable - including in CV section headings (a posting hiring for "MLOps" should find a heading containing "MLOps", not only a paraphrase).
+- Build the requirement list from Step 1 and check both drafts against it before Step 3. For the CV, apply `05-cv-templates.md`'s requirement-and-gap policy: emphasize supported evidence, use truthful natural terminology, and do not advertise ordinary gaps or stuff keywords.
+- Engage nice-to-haves by name only where the profile supports them. Use the posting's exact term when it truthfully applies, preferably in a competency label or experience evidence rather than by renaming a stable section heading.
 - **Address stated logistics and prerequisites** in the cover letter where the posting raises them: security clearance willingness, start date or availability, commute or location fit, and the posting's reference/job ID where one exists. When the employer operates across several countries, a truthful language-capabilities sentence mapped to their footprint is high-value targeting.
 
 ### CV (`cv/main_<company>_<role>.tex`)
 - In the **CV language from the profile** (the `CV language:` line in CLAUDE.md's Identity section). When the profile does not set one, default to **English**. Never switch language per posting - the CV language is a profile-level choice, so all CVs stay consistent and reusable
-- Follow the moderncv/banking format from `05-cv-templates.md`
-- Tailor the profile statement and experience bullets to the specific role
-- Reframe skills and achievements to match job requirements
-- Keep to 2 pages
-- **Grounding Audit:** Before writing to disk, audit all tailored bullet points against the union of three sources: `.claude/skills/job-application-assistant/01-candidate-profile.md` + the master CV (`cv/main_example.tex`) + `CLAUDE.md`'s Candidate Profile section to verify that all dates, roles, and metrics match exactly (zero profile drift or fabrication).
+- Follow the canonical tailoring, structure, styling, page, claim, metric, and ATS rules in `05-cv-templates.md`.
+- Write a new, job-specific summary and select experience bullets under the guide's relevance, evidence, tenure, and one-line-first rules.
+- Before writing to disk, complete the guide's factual-grounding and metric-integrity checks. Escalate unresolved ambiguities to the user; do not guess.
 
 ### Cover Letter (`cover_letters/cover_<company>_<role>.tex`)
 - **Match the language of the job posting** (Danish posting -> Danish cover letter, English posting -> English cover letter)
@@ -119,13 +117,11 @@ Read these reference files — and only these — to ground your critique:
 - `.claude/skills/job-application-assistant/02-behavioral-profile.md` — use this specifically to check whether the cover letter's voice matches the candidate's natural register. A "Collaborator" PI profile, for example, should not be given a combative, solo-hero tone; a "Persuader" profile should not be given over-hedged, apologetic phrasing.
 - `.claude/skills/job-application-assistant/03-writing-style.md`
 - `.claude/skills/job-application-assistant/04-job-evaluation.md`
-- The master CV baseline template (`cv/main_example.tex`)
-- The workspace root `CLAUDE.md` file (specifically the Candidate Profile section)
 
 Do NOT read `05-cv-templates.md` or `06-cover-letter-templates.md` — those govern LaTeX structure the drafter already applied and are not needed for content critique.
 
 ### 3. Factual Grounding Audit
-Compare every date, employer, job title, and quantitative metric in both drafts against the union of three sources: `.claude/skills/job-application-assistant/01-candidate-profile.md` + the master CV baseline template (`cv/main_example.tex`) + `CLAUDE.md`'s Candidate Profile section. A claim is grounded if ANY of these sources supports it. Mismatches between these three sources themselves must be reported to the user as a profile-consistency warning rather than treated as draft drift. Draft mismatches must be flagged as Part A edits with `"reason": "grounding"` so they can be distinguished from style changes. Keep the tolerance honest: reframed emphasis is fine; changed facts and escalated numbers are not.
+Compare every date, employer, title, and quantitative metric in both drafts against `01-candidate-profile.md`, following the claim policy in `05-cv-templates.md`. Flag a draft mismatch as a Part A edit with `"reason": "grounding"`. Flag ambiguous or conflicting profile claims for the user rather than selecting a version. Reframed emphasis is fine; changed facts, lost qualifiers, and escalated numbers are not.
 
 ### 4. Drafts to Review
 Both drafts are provided inline below. Do NOT use the Read tool on the draft files — use these exact texts.
@@ -213,10 +209,7 @@ If either compile fails, fix the error and re-compile until clean.
 Read both PDFs via the Read tool and verify:
 
 **CV (`cv/main_<company>_<role>.pdf`):**
-- [ ] Exactly 2 pages (not 1, not 3)
-- [ ] No orphaned `\cventry` titles — a job/education title line must never sit alone at the bottom of page 1 with its bullets on page 2. This is the most common failure.
-- [ ] Section headings are not isolated at the top of page 2 with only 1-2 lines below
-- [ ] No awkward whitespace gaps
+- [ ] Pass every compiled-layout and page check in `05-cv-templates.md`
 
 **Cover letter (`cover_letters/cover_<company>_<role>.pdf`):**
 - [ ] Exactly 1 page
@@ -237,39 +230,7 @@ Do not proceed to Step 6 until both PDFs pass inspection.
 
 ### 5d. ATS & keyword verification (CV)
 
-An ATS parser reads the PDF's embedded **text layer**, not the rendered page — a CV that passed visual inspection can still extract as garbage (icon glyphs where the contact details should be, scrambled reading order in multi-column layouts). This step verifies what a parser actually sees. It applies to the **CV only**; cover letters rarely go through keyword screening.
-
-**Availability check:** run `pdftotext -v`. `pdftotext` (poppler) is an optional dependency, not part of TeX distributions. If it is missing, print a one-line warning that the mechanical parse check is skipped, do the keyword-coverage check (item 3 below) against your visual Read of the PDF instead, and note the degraded mode in the Step 6 report. Same graceful-skip pattern as the salary lookup.
-
-**1. Extract the text layer:**
-
-```bash
-cd cv && pdftotext -layout main_<company>_<role>.pdf main_<company>_<role>.txt
-```
-
-Read the `.txt` file.
-
-**2. Parseability checks** on the extracted text:
-
-- [ ] **Text extracted at all**, with no garbage runs: no `(cid:NNN)` markers, no `�` replacement characters, no stretches of missing text that are visible in the PDF
-- [ ] **Email and phone survive as literal text.** Icon fonts extract as glyph names (the stock template's contact line extracts as `MOBILE-ALT [+XX ...] • Envelope [your.email@...]`) — that noise is harmless, but the actual address and digits must be present. A contact detail carried only by an icon or a hyperlink target (like the `LinkedIn` link text) is invisible to an ATS; the email must be printed as text.
-- [ ] **Reading order matches the visual order** — section headings appear in the same sequence as on the page, and lines from different sections are not interleaved. The stock banking template is single-column and safe; custom templates registered via `/add-template` with sidebars or multi-column layouts are where this breaks.
-- [ ] **Dates recognizable** — each role and degree has its years present in the extraction.
-
-Failures here are template-level problems: fix them in the `.tex` (e.g. print the email as text rather than icon-only), then re-run 5a–5c and re-extract. If a custom template's layout fundamentally scrambles extraction order, tell the user prominently — they may be trading ATS compatibility for looks.
-
-**3. Keyword coverage.** Reuse the required/preferred keyword list you extracted in Step 1 — do not re-derive it. Match each keyword against the extracted text, **in the posting's language** (when the posting's language differs from the CV language — e.g. a Danish posting against an English CV — a concept the CV legitimately covers in its own language counts as synonym-only; note the language difference). Report a table:
-
-| Keyword | Priority | Status | Note |
-|---------|----------|--------|------|
-| ... | required/preferred | covered / synonym-only / missing (have it) / missing (gap) | where it appears, or why absent |
-
-- **covered** — the term appears (verbatim or trivial inflection).
-- **synonym-only** — the concept is present under a different term. If the posting's exact term is truthfully applicable per the profile, prefer the posting's term (ATS keyword matches are often literal).
-- **missing (have it)** — the profile shows the candidate genuinely has this skill but the CV never says it: add it where it fits naturally, preferring experience bullets (concrete evidence) over the profile statement, then re-run 5a–5c.
-- **missing (gap)** — a genuine gap: leave it missing. **Never stuff keywords.** This is the same honesty rule the reviewer follows — a gap gets acknowledged in the cover letter's framing, not hidden in the CV.
-
-**4. Clean up:** delete the extracted `.txt` file.
+Run the canonical ATS and keyword-verification procedure in `05-cv-templates.md`, then delete the extracted `.txt` file.
 
 ### 5e. Clean up build artifacts
 

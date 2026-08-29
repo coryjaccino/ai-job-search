@@ -4,51 +4,57 @@ framework_version: 1.0.0
 
 # Behavioral Profile
 
-<!-- SETUP: This file is populated by running /setup -->
-<!-- You can use results from PI, DISC, Myers-Briggs, StrengthsFinder, or a self-assessment -->
-
 ## Overview
-[YOUR_NAME]'s behavioral assessment identifies them as a **[PROFILE_TYPE]** pattern. [1-2 SENTENCE_SUMMARY].
+Cory Jaccino's behavioral profile, synthesized from 14 LinkedIn recommendations spanning agency, enterprise (IHG, Turner), and consulting work, identifies him as a **knowledge-sharing specialist with a creative, client-focused drive**. Colleagues and clients consistently describe someone who combines deep technical expertise with genuine enthusiasm for teaching, collaboration, and delivering measurable results.
+
+*[Inferred from LinkedIn recommendations - review before relying on this]*
 
 ## Core Behavioral Drives
 
 | Drive | Level | Meaning |
 |-------|-------|---------|
-| [DRIVE_1] | [LEVEL] | [DESCRIPTION] |
-| [DRIVE_2] | [LEVEL] | [DESCRIPTION] |
-| [DRIVE_3] | [LEVEL] | [DESCRIPTION] |
-| [DRIVE_4] | [LEVEL] | [DESCRIPTION] |
+| **Knowledge-Sharing & Mentoring** | Very Strong | Repeatedly described as a "go-to person" who selflessly shares knowledge, trains team members, and educates clients |
+| **Client-Focused Results** | Very Strong | Consistently described as prioritizing client goals, "over delivering," and focusing on measurable outcomes |
+| **Creative Problem-Solving** | Strong | Called an "ideas machine" with a knack for outside-the-box thinking and proposing new avenues for growth |
+| **Autonomy & Initiative** | Strong | Thrives with strategic direction and autonomy; described as a self-starter who takes initiative without being asked |
 
 ## Strongest Behaviors
-- **[BEHAVIOR_1]:** [DESCRIPTION]
-- **[BEHAVIOR_2]:** [DESCRIPTION]
-- **[BEHAVIOR_3]:** [DESCRIPTION]
+- **Knowledge-Sharing & Mentoring:** "He has a selfless desire to share his paid search knowledge with the rest of the team" — multiple references highlight how he trains interns, educates agency staff, teaches certification courses, and goes out of his way to help teammates
+- **Client-Focused Dedication:** "He puts in the extra effort to really understand the problems" / "He's upfront and honest, always willing to share his knowledge" — clients and colleagues note he focuses on what matters for the client
+- **Creative Problem-Solving:** "He's an ideas machine and a doer" / "Has a plethora of ideas and always seems to be looking for ways to aim higher" — constantly proposing improvements and innovations
+- **Detail-Oriented & Analytical:** "Extremely detail oriented" / "Has an impeccable memory and perspicacious vision" — colleagues praise his analytical rigor and command of data
 
 ## How You Work Best
-- [ENVIRONMENT_PREFERENCE_1]
-- [ENVIRONMENT_PREFERENCE_2]
-- [ENVIRONMENT_PREFERENCE_3]
+- **Autonomy over strategic direction:** "He shines in an environment that grants him autonomy over general strategic direction"
+- **Individual contributor excellence:** "His effectiveness is strongest as an individual contributor" — you work best when you own a domain deeply
+- **Collaborative but self-directed:** You enjoy helping teammates but don't require close management
+- **Challenging, high-stakes environments:** Multiple references highlight your work on "the most demanding accounts imaginable" with large budgets and global scope
+- **Teaching and mentoring:** You actively enjoy training others and sharing your expertise
 
 ## Growth Areas (frame positively in applications)
-- **[AREA_1]:** [HOW_TO_FRAME_IT_POSITIVELY]
-- **[AREA_2]:** [HOW_TO_FRAME_IT_POSITIVELY]
+- **Depth over breadth:** With extensive certifications across GCP, Azure, AWS, and Oracle, plus 18 years in digital marketing, you may appear as a generalist. In applications, lead with the specific certification/experience stack most relevant to the role
+- **Independent worker:** Your strongest effectiveness is as an IC — frame this as deep ownership and reliable delivery, not an inability to collaborate
 
 ## Mapping to Job Posting Language
 
 When a job posting mentions these keywords, it's a **strong behavioral fit**:
-- [KEYWORD_OR_PHRASE_THAT_MATCHES_YOUR_STYLE]
-- [ANOTHER_KEYWORD]
+- "Mentoring" / "Knowledge-sharing" / "Training"
+- "Autonomous" / "Self-starter" / "Self-directed"
+- "Client-facing" / "Advisory" / "Consulting"
+- "Results-oriented" / "Data-driven" / "Analytical"
+- "Creative problem-solver" / "Innovation"
 
 When a job posting mentions these, flag as **potential friction** (not deal-breaker):
-- [KEYWORD_OR_PHRASE_THAT_MIGHT_CLASH]
-- [ANOTHER_KEYWORD]
+- "Highly structured" / "Tightly managed" / "Micro-managed"
+- "Process-heavy" / "Rigid hierarchy" — you work best with autonomy
+- "Team-first at all costs" — you collaborate effectively but are strongest as an IC
 
 ## Management Style Preferences
-- [WHAT_MANAGEMENT_STYLE_WORKS_FOR_YOU]
-- [WHAT_DOESN'T_WORK]
+- **Works best with:** Managers who provide strategic direction and trust you to execute; leaders who value initiative and creative input
+- **Dislikes working with:** Micromanagers; environments where process outweighs outcomes; roles with little autonomy over method
 
 ## Using This in Applications
-- **Cover letters:** [HOW_TO_WEAVE_IN_BEHAVIORAL_STRENGTHS]
-- **CV:** [WHAT_TO_EMPHASIZE]
-- **Interviews:** [WHAT_STAR_EXAMPLES_TO_USE]
-- **Don't overstate:** [WHAT_NOT_TO_CLAIM]
+- **Cover letters:** Lead with client results and measurable impact; weave in your ability to educate teams and bridge technical/business perspectives
+- **CV:** Emphasize budget sizes, revenue impact, and any metrics that demonstrate results; lead each role with the most relevant achievements for the target position
+- **Interviews:** Use STAR examples from IHG ($77M proposed savings), Turner (73% CPI reduction), and Otra AI (450+ member study group)
+- **Don't overstate:** Don't claim WordPress development as a primary career focus — frame it as a supplementary capability within your broader digital marketing/cloud consulting practice

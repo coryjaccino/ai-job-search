@@ -84,6 +84,17 @@ Do not modify `job_search_tracker.csv` - that file records applications, and `/r
 
 ---
 
+### Step 4.5: Regenerate Offline Summary
+
+After updating `seen_jobs.json`, run the filtering pipeline to clean the database and then regenerate the human-readable Markdown summary:
+```bash
+python3 tools/filter_seen_jobs.py && python3 tools/generate_seen_jobs_md.py
+```
+
+This keeps `job_scraper/seen_jobs.md` in sync with the latest rank scores and statuses.
+
+---
+
 ## Step 5: Present the Shortlist
 
 ```

@@ -1,0 +1,16 @@
+{
+  "name": "himalayas-search-cli",
+  "version": "1.0.0",
+  "description": "Personal-use CLI for Himalayas' documented public remote-jobs API.",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/cli.ts",
+    "test": "bun test --timeout 30000",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/bun": "1.3.14"
+  }
+}

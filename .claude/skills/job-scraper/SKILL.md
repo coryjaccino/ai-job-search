@@ -28,8 +28,10 @@ The user triggers this skill by saying things like:
 - "/scrape"
 
 Optional arguments:
-- A focus area, e.g. "/scrape data science" or "/scrape geophysics"
-- "broad" to run all search categories, e.g. "/scrape broad"
+- A focus area, e.g. `/scrape data science` or `/scrape geophysics`
+- A source preset from the canonical **Source Preset Registry** in `search-queries.md`, e.g. `/scrape estonia-local`, `/scrape cloud-partners`, or `/scrape remote-first cloud`
+- Named filters: `--country <name>`, `--city <name>`, `--region <name>`, one of `--remote` / `--hybrid` / `--onsite`, and `--days <1-30>`; quote values containing spaces, e.g. `--country "United States"`
+- `broad` to run all search categories, e.g. `/scrape broad`
 - "health" to run the portal health check only (Step 4.75), without searching, deduplicating, or presenting jobs - e.g. "/scrape health", or "/scrape health jobnet" to probe one portal even if disabled
 
 ---
@@ -41,10 +43,43 @@ Optional arguments:
 1. Read `job_scraper/seen_jobs.json` (create if missing - start with `{"seen": {}}`)
 2. Read `job_search_tracker.csv` to extract already-applied companies+roles
 3. Read `search-queries.md` (this directory) for the search strategy
+4. Read `job_scraper/preferences.json` for the machine-readable reinforcement-learning feedback and exclusion configuration. Read `preferences.md` (repo root) for its human-readable constraints and guidance. The JSON carries:
+   - **Excluded Title Keywords** — a JSON array of case-insensitive substring terms to skip on title match.
+   - **Excluded Regions & Job Boards** — a JSON array to skip on region facet (e.g. `cis`) or URL host (e.g. `djinni.co`, `nofluffjobs.com`) match.
+   - **Job Feedback** — structured dated records (`date`, `company`, `title`, `issue`, optional `url`). Use these to skip a URL-specific posting on future runs and to calibrate fit (e.g. a note that a posting required an unspoken language downgrades similar postings).
+   Apply all three filters in Step 2 (Fetch & Parse) before storing or presenting a job.
 
 ### Step 1: Search
 
 Read `search-queries.md` (this directory) for the search strategy. By default, run the top 3 priority query categories. If the user said "broad", run all categories. If the user specified a focus area (e.g. "data science"), prioritize queries from that category.
+
+#### Parse prompt arguments and filters
+
+Parse the invocation as `/scrape [source-preset] [job-focus terms] [filters]` before selecting queries. The first non-filter argument is a source preset only when it exactly matches the **Source Preset Registry**; all other non-filter text is job focus. Preserve quoted filter values as one value.
+
+| User-facing filter | Meaning | Search and verification behavior |
+|---|---|---|
+| `--country <name>` | Country where the job is located or where a remote candidate may reside | Use portal-native country/location filtering when available; otherwise add the country to WebSearch and verify the posting is located in or explicitly open to that country. Repeat the filter for an OR list of countries. |
+| `--city <name>` | City where the job is located | Use a portal-native city/location filter when available; otherwise add it to WebSearch and verify the posting location. |
+| `--region <name>` | Region where a remote candidate may reside or where the job is located | Use portal-native region filtering when available; otherwise add it to WebSearch and verify eligibility from the posting. |
+| `--remote`, `--hybrid`, `--onsite` | Required work arrangement | Pass the portal's corresponding work-mode filter when supported; otherwise query and verify the arrangement from the posting. |
+| `--days <1-30>` | Maximum posting age | Override the default 14-day window using each portal's documented recency flag and reject older dated postings. |
+
+Reject an invocation containing more than one work-mode flag or an invalid `--days` value. Do not treat filter values as job-focus terms. If a source preset and a geographic filter are unusual together, honor both: the preset controls where listings are found, while the filter controls job location or remote-work eligibility.
+
+Translate filters per portal only through its documented interface: LinkedIn uses its `--location` and `--remote` flags; FreeHire uses its documented country, city, region, and work-mode facets (converting country names to ISO-3166 alpha-2 codes); WebSearch adds the requested location or work-mode terms. Apply a final fetched-posting eligibility check for every result because source search filters can be incomplete.
+
+#### Source presets
+
+Treat the **Source Preset Registry** in `search-queries.md` as the single source of truth for preset names and query groups. For `remote-first`, treat `remote-sources.json` in this skill directory as the single source of truth for allowed sources, tiers, query profiles, access limitations, and verified `site:` scopes. When the first argument matches a preset:
+
+1. Run only its mapped query group(s) and source domains. Do not run unrelated query categories or installed portal CLIs.
+2. For each allowed source with an enabled dedicated CLI, use that CLI first; use its mapped `site:` query only if the CLI fails or `bun` is unavailable.
+3. For each allowed source without a dedicated CLI, run the mapped `site:` WebSearch query. For `remote-first`, construct it from the selected registry source's `websearch_scope` and query-profile terms.
+4. Treat remaining arguments as focus terms or documented modifiers within that preset (for example, `cloud` in `/scrape remote-first cloud`). They narrow the preset; they never expand its source allowlist. For `remote-first`, `all` adds only `secondary` tier sources—never `manual`, `staffing`, `discovery`, or `inactive` sources.
+5. Apply the normal date, language, location, preference, deduplication, and fit filters to every preset.
+
+Do not create a separate skill for a source grouping: presets share this skill's search and post-processing lifecycle. Use `/add-portal` only when adding a dedicated portal CLI.
 
 **Use the installed CLI tools as the primary search mechanism.** Fall back to `WebSearch` only for portals that do not have a CLI skill, or if `bun` is unavailable on the system.
 
@@ -62,7 +97,7 @@ Discover all installed portal CLI skills by reading every `SKILL.md` found under
 
 **Honor the `enabled` toggle.** A portal is enabled unless its `SKILL.md` frontmatter sets `enabled: false` (a missing key means enabled — the default). Skip each disabled portal and record it for the Step 5 summary. A fork can thus keep a portal installed but sit out a run without deleting its directory.
 
-For each **enabled** portal skill:
+For each **enabled** portal skill (all enabled skills in default/broad mode; only allowlisted skills in source-preset mode):
 
 1. Read its `SKILL.md` to find the correct `bun run …` invocation and supported flags.
 2. Translate the query terms from `search-queries.md` into that portal's flag format (e.g. `--key`, `--search-string`, `--query`, filter codes — whatever the portal's SKILL.md specifies).
@@ -92,12 +127,25 @@ and URL. For jobs worth a deeper look, fetch full detail with that portal's `det
 command (see its SKILL.md — do not guess flags) to extract **key requirements**,
 **application deadline**, and a brief description snippet.
 
+**LinkedIn authenticated detail (contacts):** For LinkedIn jobs rated **high** or
+**medium** fit, also run the authenticated detail fetcher to extract the "People you
+can reach out to" contacts section (this data is only visible when logged in):
+```bash
+python3 tools/linkedin_auth_fetch.py <job-id-or-url> --output json
+```
+This returns a JSON object with `job` (full details), `contacts` (array of
+`{name, title, profileUrl, company, companyUrl, relationship}`), and `contactsCount`.
+The script uses Playwright with the user's Chrome profile for authentication.
+If the script is unavailable or fails, fall back to the unauthenticated `detail`
+command and skip contacts extraction.
+
 **From WebSearch results:** Use `WebFetch` on the posting URL and extract the same
 fields manually.
 
 For every candidate:
 - Skip if the URL or company+title combo already exists in `seen_jobs.json`
 - Skip if the company+role already appears in `job_search_tracker.csv`
+- **Region-Restriction Check (Ingestion-Time Filter):** Parse the fetched description, title, or metadata for country restrictions (e.g., "Romania only", "Must be resident in Germany", "open only to Spain residents"). If the role is restricted to any country other than the United States or Estonia, skip it entirely, unless it explicitly allows broad indicators (e.g., "EU-wide", "Europe", "Worldwide", "Global").
 
 ### Step 2.5: Mass-Posting Detection (within this run)
 
@@ -122,6 +170,7 @@ For each new job, do a rapid fit check (NOT the full evaluation from `04-job-eva
     "<url_or_company_title_key>": {
       "title": "...",
       "company": "...",
+      "location": "...",
       "url": "...",
       "first_seen": "YYYY-MM-DD",
       "fit": "high/medium/low",
@@ -138,29 +187,34 @@ The `portal` field records which CLI skill produced the job (results are already
 
 2. Only present jobs NOT already in the seen list or tracker.
 
-### Step 4.5: Generate Referral Contact Links (High & Medium Fit Only)
+### Step 4.5: Contacts — Real People + Fallback Search Links (High & Medium Fit Only)
 
-For every job from this run with `fit` of **high** or **medium** (skip low-fit jobs),
-build two LinkedIn people-search URLs so the user can find a recruiter or team member to
-reach out to for a referral or a warm intro. This is deliberately a link-generation step,
-not an automated lookup: no scraping, no third-party API, zero runtime dependencies or
-credentials required.
+For every LinkedIn job from this run with `fit` of **high** or **medium** (skip low-fit
+jobs), present contacts the user can reach out to for a referral or warm intro.
 
-**A. Recruiters / Talent Acquisition (the referral path)**
+**A. Authenticated contacts (primary).** If Step 2 ran `tools/linkedin_auth_fetch.py`
+successfully for this job, use the real `contacts` array returned by that script. Each
+contact has: `name`, `title` (position), `profileUrl`, `company`, `companyUrl`,
+`relationship`. Present them directly — these are actual people LinkedIn suggests based
+on the user's network graph.
+
+**B. Fallback search links (when authenticated fetch failed or returned 0 contacts).**
+If the authenticated fetcher was unavailable, errored, or returned no contacts, generate
+two LinkedIn people-search URLs so the user can browse manually:
+
 ```
 https://www.linkedin.com/search/results/people/?keywords=<url-encoded "<Company Name> recruiter">&origin=GLOBAL_SEARCH_HEADER
 ```
-
-**B. Role/team peers (informational-outreach / warm-intro path)**
+and
 ```
 https://www.linkedin.com/search/results/people/?keywords=<url-encoded "<Company Name> <role keyword>">&origin=GLOBAL_SEARCH_HEADER
 ```
 Use a short keyword drawn from the posting's title for `<role keyword>` - e.g. a posting
 titled "AI Program Manager" becomes `"<Company Name> AI Program Manager"`.
 
-Both links are for the user to open and browse themselves - never fetch or scrape the
-LinkedIn people-search result pages programmatically. Never fabricate contacts or claim a
-specific person was found; these are search links, not results.
+For non-LinkedIn portals (Jobindex, Jobnet, etc.), always use fallback search links B.
+
+Never fabricate contacts or claim a specific person was found when using fallback links.
 
 ### Step 4.75: Portal Health Check
 
@@ -218,6 +272,15 @@ LinkedIn search links:
 - Role/team-peer search link, for the warm-intro / informational-outreach path
 ```
 
+### Step 5.5: Regenerate Offline Summary
+
+After presenting results, run the filtering pipeline to clean the database and then regenerate the human-readable Markdown summary:
+```bash
+python3 tools/filter_seen_jobs.py && python3 tools/generate_seen_jobs_md.py
+```
+
+This updates `job_scraper/seen_jobs.md` — a table of the last 14 days' jobs sorted by fit and freshness. The file is in `.clineignore` so it never bloats the context window.
+
 After presenting, ask:
 > "Want me to evaluate any of these in detail? Just give me the number(s)."
 
@@ -239,6 +302,6 @@ If the user decides to apply to any job, add a row to `job_search_tracker.csv`.
 4. **Only open positions.** Skip postings with expired deadlines or those marked as closed.
 5. **Be efficient with detail fetches.** Don't run `detail` or WebFetch on every search hit — pre-filter by title/snippet, then fetch only promising matches.
 6. **Parallel searches.** Run portal CLI searches in parallel; use WebSearch only for gaps the CLIs don't cover.
-7. **No automated people lookups.** Referral contacts (Step 4.5) are LinkedIn search links only - never fetch or scrape LinkedIn people-search result pages programmatically.
+7. **Authenticated LinkedIn fetching is allowed for job detail pages.** Step 2 may run `tools/linkedin_auth_fetch.py` on LinkedIn job posting URLs to extract the "People you can reach out to" contacts section. This script uses Playwright with the user's Chrome profile for authentication. However, never fetch or scrape LinkedIn people-search *result* pages programmatically — only job posting detail pages (`/jobs/view/...`). The fallback search links in Step 4.5B are for the user to open manually.
 8. **Health checks are bounded and honest.** Step 4.75 spends at most one probe, one retry, and (in `health` mode) one detail fetch per portal - a diagnosis, not a crawl. A rate-limit is never evidence of breakage. Health verdicts come only from observed CLI output; a portal that could not be tested is reported as inconclusive, never guessed. The `enabled` toggle is the only thing the health check may edit, and only with confirmation.
 9. **Flag distribution patterns, never accuse.** The mass-posting signal (Step 2.5) describes how a listing is being distributed, not a claim that the employer is a scam. Never name a company as fraudulent or untrustworthy - present the observation and let the user decide.

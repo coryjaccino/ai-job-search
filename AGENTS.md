@@ -17,3 +17,10 @@ To prevent duplication and configuration drift across different AI agent framewo
    - Do not duplicate these rules or specifications. Treat `.claude/` files as the single source of truth.
 3. **Portal Search Skills:**
    - Job-portal search CLIs live under [.agents/skills/](.agents/skills/) in the portable Agent Skills format (with a `SKILL.md` per portal). Codex and Antigravity discover these automatically; the `/scrape` workflow in [.claude/skills/job-scraper/](.claude/skills/job-scraper/) orchestrates them.
+
+## Tooling & Command Execution Rules
+
+1. **Do Not Use the macOS `open` Command on Text Files:**
+   - When you need to read or inspect files (like `.md`, `.json`, `.py`, or `.tex`), **always use your native workspace tools** (e.g., `read_file`, `search_files`).
+   - Running `open <file>` as a CLI command will fail with `RBSRequestErrorDomain Code=5 "Launch failed"` in sandboxed terminal environments like this one.
+   - If you want the user to see a file, simply instruct them to open it in their editor or browser rather than attempting to execute the `open` command yourself.

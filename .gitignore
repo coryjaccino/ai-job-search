@@ -71,6 +71,8 @@ documents/interview/**
 
 # Personal job search tracking
 job_search_tracker.csv
+preferences.md
+job_scraper/preferences.json
 
 # Gmail sync state (message IDs, subjects - personal data)
 gmail_sync/

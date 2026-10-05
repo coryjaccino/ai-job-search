@@ -86,6 +86,8 @@ Does the role and company culture match the behavioral profile?
 - Europe (outside Estonia): Remote preferred, Hybrid possible
 - Willing to travel for client meetings as needed
 
+**Clarified October 4, 2026:** Include good-fit on-site roles with Estonian employers only, preferring remote then hybrid. Non-Estonian roles must permit remote work from Estonia. Verify both employer and workplace; office requirements in Estonia are a preference/commute consideration, not an automatic veto.
+
 ### 5. Career Alignment & Motivation (0-100)
 Does this role advance career goals and contain tasks that energize?
 

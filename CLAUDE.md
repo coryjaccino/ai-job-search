@@ -98,11 +98,15 @@ This repo is a job application workspace. Claude acts as a career advisor and ap
 - **Estonian tech**: Local companies, SaaS, e-Residency ecosystem
 - **US remote roles**: Any US-based company open to international remote
 
+### Current Search Focus
+- Prioritize Google Ads, Google Analytics/GA4, Google Cloud, Looker Studio (formerly Data Studio), and relevant BigQuery work.
+- Email marketing/tracking is a supporting capability: Cory understands it and has some experience, but does not want it added to his résumé or emphasized as a search focus (clarified October 4, 2026).
+
 ### Deal-breakers
 <!-- Hard constraints on job search -->
 - **No pure WordPress roles** — WordPress is a supplementary capability, not a career direction
 - **Remote-only for US-based roles** — no relocation
-- **No roles requiring full-time office presence** without flexibility
+- **On-site work acceptable for Estonian employers only** — prefer remote, then hybrid, then on-site for good-fit roles; verify employer and work location. Non-Estonian roles must permit remote work from Estonia.
 - **No micromanaged environments** — autonomy over method is essential
 
 ## Repo Structure

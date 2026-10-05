@@ -13,7 +13,7 @@ framework_version: 1.0.0
 - **GitHub:** github.com/coryjaccino
 - **Languages:** English (Native), Spanish (Professional), Italian (Elementary), Estonian (Elementary)
 - **Status:** Open to Work
-- **Constraints:** [YOUR_COMMUTE_OR_LOCATION_CONSTRAINTS]
+- **Constraints:** Based in Kuressaare, Estonia. Include good-fit on-site roles with Estonian employers only; remote and hybrid preferred. Non-Estonian roles must permit remote work from Estonia (clarified October 4, 2026).
 
 ## Education
 
@@ -112,6 +112,8 @@ Atlanta, GA
 - **Oracle Cloud**: Foundations, Generative AI Certified Professional
 
 ### Domain Expertise
+- **Current search priorities:** Google Ads, GA4, Google Cloud, Looker Studio/Data Studio, and relevant BigQuery work.
+- **Email marketing/tracking:** Understands it, can do it, and has some experience; not sufficient experience to add to the résumé. Supporting capability only, not a search focus (clarified October 4, 2026).
 - Google Ads & Paid Search (18 years experience)
 - Google Analytics 4 (GA4) & Google Tag Manager
 - Search Engine Optimization (SEO) / AI Search

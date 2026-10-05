@@ -2,9 +2,9 @@
 """
 Generate a human-readable Markdown summary of seen jobs.
 
-Reads job_scraper/seen_jobs.json, filters to the last 14 days,
-sorts by fit (high→medium→low) then first_seen descending,
-and writes job_scraper/seen_jobs.md.
+Reads job_scraper/seen_jobs.json and groups postings by publication age.
+Archive candidates are hidden unless --include-archive is supplied.
+No database records are modified.
 
 Title values are hyperlinked to each job posting's URL, and Company
 values are hyperlinked to the company's LinkedIn profile or website
@@ -14,47 +14,28 @@ Usage:
     python3 tools/generate_seen_jobs_md.py
 """
 
+import argparse
 import json
 import re
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from pathlib import Path
+
+if __package__:
+    from .job_freshness import freshness, sort_key
+else:
+    from job_freshness import freshness, sort_key
 
 ROOT = Path(__file__).resolve().parent.parent
 JSON_PATH = ROOT / "job_scraper" / "seen_jobs.json"
 MD_PATH = ROOT / "job_scraper" / "seen_jobs.md"
 COMPANIES_PATH = ROOT / "target_companies.md"
 
-FIT_ORDER = {"high": 0, "medium": 1, "low": 2}
-CUTOFF = datetime.now(timezone.utc) - timedelta(days=14)
 
 
 def load_seen() -> dict:
     if not JSON_PATH.exists():
         return {"seen": {}}
     return json.loads(JSON_PATH.read_text(encoding="utf-8"))
-
-
-def is_recent(first_seen: str) -> bool:
-    """Check if a YYYY-MM-DD date string is within the last 14 days."""
-    try:
-        dt = datetime.strptime(first_seen, "%Y-%m-%d").replace(tzinfo=timezone.utc)
-        return dt >= CUTOFF
-    except (ValueError, TypeError):
-        return False
-
-
-def sort_key(item):
-    """Sort by fit (high first), then first_seen descending (newest first)."""
-    key, entry = item
-    fit = entry.get("fit", "low").lower()
-    fit_rank = FIT_ORDER.get(fit, 99)
-    # Convert YYYY-MM-DD to integer for proper numeric negation (descending)
-    date_str = entry.get("first_seen", "0000-00-00")
-    try:
-        date_int = int(date_str.replace("-", ""))
-    except (ValueError, AttributeError):
-        date_int = 0
-    return (fit_rank, -date_int)
 
 
 def load_company_links() -> dict:
@@ -134,24 +115,27 @@ def _company_url(company: str, links: dict) -> str | None:
     return None
 
 
-def format_table(entries: list, company_links: dict) -> str:
+def format_table(entries: list, company_links: dict, today=None) -> str:
     """Build the Markdown table rows with hyperlinked Title and Company."""
     if not entries:
-        return "_No jobs found in the last 14 days._\n"
+        return "_No postings in this section._\n"
 
     lines = [
-        "| # | First Seen | Fit | Status | Score | Title | Company | Location |",
-        "|---|------------|-----|--------|-------|-------|---------|----------|",
+        "| # | Published | Age | Date confidence | First seen | Fit | Workflow | Score | Availability | Last verified open | Title | Company | Location |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
 
     for i, (key, entry) in enumerate(entries, start=1):
         first_seen = entry.get("first_seen", "?")
         fit = entry.get("fit", "?")
         status = entry.get("status", "?")
-        title = entry.get("title", "?")
-        company = entry.get("company", "?")
-        rank_score = entry.get("rank_score")
-        location = entry.get("location") or "—"
+        title = str(entry.get("title", "?")).replace('|', '\\|').replace('\n', ' ')
+        company = str(entry.get("company", "?")).replace('|', '\\|').replace('\n', ' ')
+        rank_score = entry.get("evaluation_score", entry.get("rank_score"))
+        location = str(entry.get("location") or "—").replace('|', '\\|').replace('\n', ' ')
+        info = freshness(entry, today)
+        availability = entry.get('availability', 'unverified')
+        verified = entry.get('last_verified_open', '—')
 
         # Resolve the job posting URL: prefer an explicit "url" field,
         # fall back to the JSON key when it is itself a URL.
@@ -173,51 +157,58 @@ def format_table(entries: list, company_links: dict) -> str:
         company_display = f"[{company}]({company_url})" if company_url else company
 
         lines.append(
-            f"| {i} | {first_seen} | {fit_display} | {status} | {score_display} | {title_display} | {company_display} | {location} |"
+            f"| {i} | {info['published_date'] or '—'} | {str(info['age_days']) + 'd' if info['age_days'] is not None else '—'} | {info['confidence']} | {first_seen} | {fit_display} | {status} | {score_display} | {availability} | {verified} | {title_display} | {company_display} | {location} |"
         )
 
     return "\n".join(lines) + "\n"
 
 
-def generate() -> str:
+def generate(include_archive=False, today=None) -> str:
     data = load_seen()
     seen = data.get("seen", {})
 
     # Load company LinkedIn/website links for Company-column hyperlinks
     company_links = load_company_links()
 
-    # Filter to recent entries
-    recent = [(k, v) for k, v in seen.items() if is_recent(v.get("first_seen", ""))]
-
-    # Sort: fit (high→medium→low), then first_seen descending
-    recent.sort(key=sort_key)
-
-    # Count by fit
-    high = sum(1 for _, v in recent if v.get("fit") == "high")
-    medium = sum(1 for _, v in recent if v.get("fit") == "medium")
-    low = sum(1 for _, v in recent if v.get("fit") == "low")
+    active = [(k, v) for k, v in seen.items() if v.get('status') not in ('expired', 'applied', 'skipped') and v.get('availability') != 'closed']
+    groups = {name: [] for name in ('Fresh', 'Current', 'Aging', 'Older', 'Archive candidate', 'Undated')}
+    for item in active:
+        groups[freshness(item[1], today)['band']].append(item)
+    for entries in groups.values():
+        entries.sort(key=lambda item: sort_key(item, today))
 
     now_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
 
     lines = [
-        f"# Seen Jobs — Last 14 Days",
+        f"# Job Opportunities — Posting Freshness",
         f"",
         f"_Generated: {now_str}_",
         f"",
-        f"**{len(recent)} jobs** ({high} high, {medium} medium, {low} low match).",
+        f"**{len(active)} active candidates** out of {len(seen)} stored records. Workflow and availability are independent of age.",
+        "Default shortlist: Fresh (0–7d) + Current (8–14d). Older and undated sections are review queues, not confirmed-open shortlists.",
+        "Dates marked source-reported/uncertain may be aggregator refresh dates. Collection and verification do not reset publication age.",
+        "Numeric scores take precedence; unscored entries use high/medium/low fallback priority. Evaluation scores supersede triage scores. Deadline urgency, then age, break ties.",
         f"",
     ]
 
-    lines.append(format_table(recent, company_links))
+    for name, entries in groups.items():
+        if name == 'Archive candidate' and not include_archive:
+            lines.append(f"\n_Archive candidates hidden: {len(entries)}. Use --include-archive to display; records are retained._\n")
+            continue
+        lines.append(f"\n## {name} ({len(entries)})\n")
+        lines.append(format_table(entries, company_links, today))
 
     return "\n".join(lines)
 
 
 def main():
-    md_content = generate()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--include-archive', action='store_true')
+    args = parser.parse_args()
+    md_content = generate(args.include_archive)
     MD_PATH.write_text(md_content, encoding="utf-8")
     count = len(json.loads(JSON_PATH.read_text(encoding="utf-8")).get("seen", {}))
-    print(f"Written {MD_PATH} ({count} total entries, {md_content.count('|') // 8 - 2} recent)")
+    print(f"Written {MD_PATH} ({count} stored entries; grouped by publication age)")
 
 
 if __name__ == "__main__":

@@ -279,7 +279,9 @@ After presenting results, run the filtering pipeline to clean the database and t
 python3 tools/filter_seen_jobs.py && python3 tools/generate_seen_jobs_md.py
 ```
 
-This updates `job_scraper/seen_jobs.md` — a table of the last 14 days' jobs sorted by fit and freshness. The file is in `.clineignore` so it never bloats the context window.
+This updates `job_scraper/seen_jobs.md` — publication-age sections using `tools/job_freshness.py`: Fresh 0–7 days, Current 8–14, Aging 15–30, Older 31–60, Archive candidate 61+, Undated. Fresh + Current form the default shortlist; older/undated sections are review queues. Archive candidates are hidden unless the generator is run with `--include-archive`. Collection dates never substitute for publication dates. The file is in `.clineignore` so it never bloats the context window.
+
+Preserve original publication dates separately from first collection, refresh/repost and verification dates. Use `published_date` when known, otherwise existing `posted`; mark `publication_confidence` as `verified`, `source-reported`, `uncertain`, or `unknown`. Source-reported aggregator dates are not verified original publication dates. Record `availability` independently as `open`, `closed`, or `unverified`; only a confirmed-open fetch establishes `last_verified_open`. `last_checked` alone does not establish openness. Age never changes workflow status or proves closure.
 
 After presenting, ask:
 > "Want me to evaluate any of these in detail? Just give me the number(s)."

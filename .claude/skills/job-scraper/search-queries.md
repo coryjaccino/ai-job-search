@@ -137,9 +137,11 @@ These are Estonian companies known to be open to hiring international talent, pl
 Focus on **United States** and **Estonia** primarily:
 
 - **United States** — remote roles only (no relocation)
-- **Estonia** — Tallinn, Tartu, Kuressaare, or anywhere in Estonia (remote/hybrid preferred)
+- **Estonia** — Tallinn, Tartu, Kuressaare, or anywhere in Estonia: include good-fit remote, hybrid, and on-site roles with Estonian employers, preferring remote then hybrid. Verify employer and work location before treating an on-site role as eligible.
 - **Europe (remote)** — fully remote roles across the EU/EEA
 - **Worldwide (remote)** — fully remote roles open globally
+
+Current role priority (clarified October 4, 2026): Google Ads/PPC, Google Analytics/GA4, Google Cloud, Looker Studio (formerly Data Studio), and relevant BigQuery work. Email marketing/tracking is a supporting capability, not a search focus or résumé claim. Do not apply a remote-only filter to all Estonian-employer searches.
 
 ### Location Filters in Prompts
 

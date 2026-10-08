@@ -51,7 +51,11 @@ Optional arguments:
 
 ### Step 1: Search
 
-Read `search-queries.md` (this directory) for the search strategy. By default, run the top 3 priority query categories. If the user said "broad", run all categories. If the user specified a focus area (e.g. "data science"), prioritize queries from that category.
+Read `search-queries.md` (this directory) for the search strategy. Default daily collection runs all configured query families, not only the top three. Focus requests may narrow the run, but report omitted families and sources.
+
+**Executable daily collector:** Run `python3 tools/collect_jobs.py`. Configuration is canonical in `collection-plan.json`; implementation details and limitations are documented in `tools/README_COLLECTION.md`. It collects permitted API/RSS sources and configured employer boards, logs pagination and failures, and writes uncapped review queues under `reports/`. It never sends applications, changes the application tracker, or assigns fit scores from keywords. Review full descriptions against the canonical profile and evaluation framework before calling a posting a strong match. Unresolved business terms are flags, not automatic rejection.
+
+Do not treat configured sources as executed coverage. Report actual sources/queries/pages, incomplete budgets, duplicates, newly discovered versus newly published postings, pipelines, and verified strong matches separately. Preserve collection-state and source attribution. Use Data Studio in reports; retain Looker Studio as a historical search alias.
 
 #### Parse prompt arguments and filters
 
@@ -102,7 +106,7 @@ For each **enabled** portal skill (all enabled skills in default/broad mode; onl
 1. Read its `SKILL.md` to find the correct `bun run …` invocation and supported flags.
 2. Translate the query terms from `search-queries.md` into that portal's flag format (e.g. `--key`, `--search-string`, `--query`, filter codes — whatever the portal's SKILL.md specifies).
 3. Scope to the last 14 days using the portal's supported recency flag (`--jobage`, `--since <YYYY-MM-DD>`, `--order PublicationDate`, etc. — as documented per portal).
-4. Cap results to ~20 per call using the portal's limit flag.
+4. Use the documented page size and paginate permitted sources until the date window/source is exhausted or a configured budget is reached. Mark budget stops and repeated pages incomplete. Do not bulk-automate LinkedIn: its existing skill warns against that use; report it as a manual/agent source instead of silently including it in daily collection.
 5. Use `--format json` for machine-readable output.
 
 Run all portal CLI calls in parallel where possible using the Agent tool. Collect all `results` arrays into a single pool for Step 2, keeping each result tagged with its source portal skill (for Step 2 `detail` lookups).

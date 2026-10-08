@@ -18,7 +18,7 @@ Follow these steps **in order**.
 - `--days <N>` → maximum publication age in calendar days, a non-negative integer (e.g. 30 or 60); incompatible with `--all-ages`.
 - `--all-ages` → include all dated age bands, including archive candidates; does not imply `--all` or include undated jobs.
 - `--include-undated` → explicitly include missing, invalid or future publication dates, separately labeled Undated.
-- `--top <N>` → shortlist size (default 5)
+- `--top <N>` → explicitly limit the displayed shortlist. Default: show every qualifying scored match; do not silently truncate to five.
 
 ---
 

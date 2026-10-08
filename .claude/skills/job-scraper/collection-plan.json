@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "days": 14,
+  "max_pages_per_query": 6,
+  "request_delay_seconds": 1,
+  "countries": ["EE", "US"],
+  "query_families": {
+    "paid_search": ["google ads", "paid search", "PPC", "SEM specialist", "paid media consultant"],
+    "measurement": ["google analytics", "GA4", "google tag manager", "digital analytics", "measurement consultant"],
+    "marketing_data": ["data studio", "looker studio", "marketing analytics", "BigQuery"],
+    "google_consulting": ["google cloud consultant", "GCP consultant", "marketing technology consultant", "analytics consultant"],
+    "adjacent": ["technical SEO", "AI search", "marketing automation consultant"]
+  },
+  "sources": [
+    {"id": "himalayas", "adapter": "himalayas", "enabled": true, "documentation": "https://himalayas.app/docs/remote-jobs-api"},
+    {"id": "freehire", "adapter": "freehire", "enabled": true, "documentation": "https://github.com/strelov1/freehire"},
+    {"id": "jobicy", "adapter": "jobicy", "enabled": true, "documentation": "https://github.com/Jobicy/remote-jobs-api"},
+    {"id": "wwr-marketing", "adapter": "rss", "enabled": true, "url": "https://weworkremotely.com/categories/remote-sales-and-marketing-jobs.rss", "documentation": "https://weworkremotely.com/remote-job-rss-feed"},
+    {"id": "wwr-other", "adapter": "rss", "enabled": true, "url": "https://weworkremotely.com/categories/all-other-remote-jobs.rss", "documentation": "https://weworkremotely.com/remote-job-rss-feed"}
+  ],
+  "employer_boards": [
+    {"id": "barkleyokrp", "company": "BarkleyOKRP", "adapter": "greenhouse", "board": "barkleyokrp", "career_url": "https://job-boards.greenhouse.io/barkleyokrp", "evidence": "reports/reworked-shortlist-2026-10-07.md"},
+    {"id": "velir", "company": "Velir", "adapter": "greenhouse", "board": "velir", "career_url": "https://job-boards.greenhouse.io/velir", "evidence": "reports/reworked-shortlist-2026-10-07.md"},
+    {"id": "saasgroup", "company": "saas.group", "adapter": "greenhouse", "board": "saasgroup", "career_url": "https://job-boards.greenhouse.io/saasgroup", "evidence": "reports/search-2026-10-04/review.md"},
+    {"id": "rightsideup", "company": "Right Side Up", "adapter": "lever", "board": "rightsideup", "career_url": "https://jobs.lever.co/rightsideup", "pipeline": true, "evidence": "reports/reworked-shortlist-2026-10-07.md"},
+    {"id": "adswerve", "company": "Adswerve", "adapter": "greenhouse", "board": "adswerveinc", "career_url": "https://job-boards.greenhouse.io/adswerveinc", "evidence": "https://adswerve.com/join-us/job-opportunities", "verified_date": "2026-10-08"},
+    {"id": "rtbhouse", "company": "RTB House", "adapter": "greenhouse", "board": "rtbhouse", "career_url": "https://job-boards.greenhouse.io/rtbhouse", "evidence": "https://job-boards.greenhouse.io/rtbhouse", "verified_date": "2026-10-08"},
+    {"id": "fueled", "company": "Fueled", "adapter": "greenhouse", "board": "fueledcareers", "career_url": "https://job-boards.greenhouse.io/fueledcareers", "evidence": "https://job-boards.greenhouse.io/fueledcareers/jobs/4889918008", "verified_date": "2026-10-08"},
+    {"id": "current", "company": "Current", "adapter": "greenhouse", "board": "current", "career_url": "https://job-boards.greenhouse.io/current", "evidence": "https://job-boards.greenhouse.io/current/jobs/8548526002", "verified_date": "2026-10-08"},
+    {"id": "underscoremarketing", "company": "Underscore Marketing", "adapter": "greenhouse", "board": "underscoremarketing", "career_url": "https://job-boards.greenhouse.io/underscoremarketing", "evidence": "https://job-boards.greenhouse.io/underscoremarketing/jobs/4358312009", "verified_date": "2026-10-08"},
+    {"id": "seerinteractive", "company": "Seer Interactive", "adapter": "lever", "board": "seerinteractive", "career_url": "https://jobs.lever.co/seerinteractive", "evidence": "https://jobs.lever.co/seerinteractive/2a3b6025-e0c8-4afa-b7c3-072c6d034579", "verified_date": "2026-10-08"}
+  ],
+  "manual_sources": [
+    {"id": "linkedin", "reason": "Existing skill warns against bulk automated access; not included in scheduled collection."},
+    {"id": "indeed", "reason": "No verified permitted automated connector; agent/user search remains separate."},
+    {"id": "creative-circle", "reason": "Candidate portal; access and business contracting require verification."},
+    {"id": "onward-search", "reason": "No installed connector; verify individual postings through agent search."},
+    {"id": "robert-half", "reason": "No installed connector; distinguish staffing payroll from business invoicing."}
+  ]
+}

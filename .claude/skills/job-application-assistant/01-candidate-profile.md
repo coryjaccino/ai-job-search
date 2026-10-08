@@ -6,14 +6,17 @@ framework_version: 1.0.0
 
 ## Identity
 - **Name:** Cory Jaccino
-- **Location:** United States & Estonia
+- **Location:** Columbus, Georgia, United States & Kuressaare, Estonia; spends most of his time in Kuressaare.
 - **Phone:** +1 (678) 809-3542 & +372 5854 7237
 - **Email:** cory@coryjaccino.com
 - **LinkedIn:** www.linkedin.com/in/coryjaccino
 - **GitHub:** github.com/coryjaccino
 - **Languages:** English (Native), Spanish (Professional), Italian (Elementary), Estonian (Elementary)
 - **Status:** Open to Work
-- **Constraints:** Based in Kuressaare, Estonia. Include good-fit on-site roles with Estonian employers only; remote and hybrid preferred. Non-Estonian roles must permit remote work from Estonia (clarified October 4, 2026).
+- **Citizenship:** US citizen; do not exclude US opportunities because he also works from Estonia.
+- **Work arrangement:** Remote preferred; hybrid considered in Estonia. Only in Estonia is he willing to work on-site, for a good-fit role with an Estonian employer. No US on-site requirement or relocation.
+- **Business relationship:** Provides services through his Estonian OÜ (most likely) or his US sole-proprietor business, which uses an EIN. The client contracts with and is invoiced by his business; do not present this as seeking employee permission to work from Estonia. Distinguish business-to-business/C2C, individual contracting, employee, and unspecified arrangements; do not assume a generic contractor label confirms business invoicing.
+- **Search screening:** Do not require explicit permission to work from Estonia as a blanket inclusion criterion. Report stated contractual service-location, data-access, and vendor-entity restrictions separately; missing wording is not grounds for exclusion or proof of unrestricted service delivery. See /Users/coryjaccino/Development/ai-job-search/preferences.md for detailed screening rules, including mandatory time-tracking exclusions.
 
 ## Education
 

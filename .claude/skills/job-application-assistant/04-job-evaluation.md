@@ -76,17 +76,17 @@ Does the role and company culture match the behavioral profile?
 
 ### 4. Location & Logistics (Pass/Fail + Notes)
 - Within commute range: PASS
-- Remote with occasional office: PASS
+- Remote with occasional office in Estonia for an Estonian employer: PASS, subject to commute review; other mandatory office attendance: FAIL
 - Requires relocation: FAIL (deal-breaker)
 - Frequent international travel: FLAG (discuss with user)
 
 **Location constraints:**
 - US: Remote only
 - Estonia: All locations
-- Europe (outside Estonia): Remote preferred, Hybrid possible
+- Europe (outside Estonia): Remote only; distinguish occasional client meetings from mandatory office attendance
 - Willing to travel for client meetings as needed
 
-**Clarified October 4, 2026:** Include good-fit on-site roles with Estonian employers only, preferring remote then hybrid. Non-Estonian roles must permit remote work from Estonia. Verify both employer and workplace; office requirements in Estonia are a preference/commute consideration, not an automatic veto.
+**Canonical location and business screening:** Follow /Users/coryjaccino/Development/ai-job-search/.claude/skills/job-application-assistant/01-candidate-profile.md and /Users/coryjaccino/Development/ai-job-search/preferences.md (clarified October 7, 2026). Do not impose a blanket requirement for permission to work from Estonia. Separate client service-location/vendor restrictions from employee location requirements, and assess whether business invoicing is explicitly offered or remains unconfirmed. Office requirements in Estonia with an Estonian employer are a preference/commute consideration, not an automatic veto.
 
 ### 5. Career Alignment & Motivation (0-100)
 Does this role advance career goals and contain tasks that energize?

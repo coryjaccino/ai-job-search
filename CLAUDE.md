@@ -17,7 +17,7 @@ This repo is a job application workspace. Claude acts as a career advisor and ap
 
 ### Identity
 - **Name:** Cory Jaccino
-- **Location:** Kuressaare, Estonia (spends 1-2 months/year between Atlanta, GA and Columbus, GA, USA)
+- **Location:** Columbus, Georgia, United States & Kuressaare, Estonia; spends most of his time in Kuressaare. For citizenship, business relationship, and location-screening rules, see /Users/coryjaccino/Development/ai-job-search/.claude/skills/job-application-assistant/01-candidate-profile.md.
 - **Languages:** English (Native), Spanish (Professional), Italian (Elementary), Estonian (Elementary)
 - **CV language:** English
 
@@ -96,7 +96,7 @@ This repo is a job application workspace. Claude acts as a career advisor and ap
 - **Cloud / AI / ML**: Google Cloud partners, AI consulting firms, cloud engineering roles
 - **Technical Consulting**: Solutions consultant, technical account manager, advisory roles
 - **Estonian tech**: Local companies, SaaS, e-Residency ecosystem
-- **US remote roles**: Any US-based company open to international remote
+- **US remote roles**: Include good-fit US opportunities; do not exclude them because Cory also works from Estonia. Evaluate the offered business relationship and stated restrictions using the canonical candidate profile.
 
 ### Current Search Focus
 - Prioritize Google Ads, Google Analytics/GA4, Google Cloud, Looker Studio (formerly Data Studio), and relevant BigQuery work.
@@ -106,7 +106,7 @@ This repo is a job application workspace. Claude acts as a career advisor and ap
 <!-- Hard constraints on job search -->
 - **No pure WordPress roles** — WordPress is a supplementary capability, not a career direction
 - **Remote-only for US-based roles** — no relocation
-- **On-site work acceptable for Estonian employers only** — prefer remote, then hybrid, then on-site for good-fit roles; verify employer and work location. Non-Estonian roles must permit remote work from Estonia.
+- **Location and business arrangement** — follow /Users/coryjaccino/Development/ai-job-search/.claude/skills/job-application-assistant/01-candidate-profile.md and /Users/coryjaccino/Development/ai-job-search/preferences.md. On-site work is an option only in Estonia with a good-fit Estonian employer; do not impose a blanket Estonia-permission requirement on non-Estonian opportunities.
 - **No micromanaged environments** — autonomy over method is essential
 
 ## Repo Structure
